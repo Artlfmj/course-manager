@@ -7,11 +7,18 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const morgan = require("morgan");
 const bcrypt = require("bcrypt"); // Import bcrypt for password hashing
+const rateLimit = require("express-rate-limit");
 
 const User = require("./db/User");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 requests per windowMs
+  message: "Too many requests from this IP, please try again later.",
+});
 
 app.set("view engine", "ejs");
 app.set("views", "src/views");
@@ -72,7 +79,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/login", (req, res) => {
+app.get("/login", limiter, (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   } else {
@@ -98,7 +105,7 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-app.get("/logout", (req, res) => {
+app.get("/logout", limiter, (req, res) => {
     req.logout((err) => {
       if (err) {
         console.error("Error during logout:", err);
@@ -117,7 +124,7 @@ app.get("/register", (req, res) => {
   res.render("register", { messages: req.flash("error") });
 });
 
-app.post("/register", async (req, res) => {
+app.post("/register", limiter, async (req, res) => {
   const { username, email, password, confirmPassword, fullName } = req.body;
 
   try {
