@@ -1,5 +1,5 @@
 {
-    "mongodb_uri": "YOUR_MONGODB_URI_HERE",
+    "mongodb_uri": "mongodb://localhost:27017/course",
     "secret_key": "YOUR_SECRET_KEY_HERE"
   }
   
