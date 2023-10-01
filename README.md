@@ -29,11 +29,11 @@ This repository is participating in Hacktoberfest 2023. If you are new to Hackto
 
 **Continuous Growth:** Stay up-to-date with the latest technologies and trends in the ever-evolving programming landscape. Our course catalog is regularly updated to reflect industry advancements.
 
+**Learning Flexibility:** Tailor your learning journey to your schedule and preferences. Study at your own pace, revisit course materials as needed, and explore new topics of interest.
+
+Whether you're looking to kickstart your coding career, level up your programming abilities, or explore new horizons in the tech world, Course Manager is your partner in the quest for knowledge. Join our thriving community of learners today and embark on an exciting journey of programming excellence.
+
 ## Our Discord
 🌐 **Join Us Today:**
 Help us improve online learning and be part of something bigger this Hacktoberfest! Join our community on Discord: [https://discord.gg/xbEPyR3U8e] and let's make a difference together.
 
-
-**Learning Flexibility:** Tailor your learning journey to your schedule and preferences. Study at your own pace, revisit course materials as needed, and explore new topics of interest.
-
-Whether you're looking to kickstart your coding career, level up your programming abilities, or explore new horizons in the tech world, Course Manager is your partner in the quest for knowledge. Join our thriving community of learners today and embark on an exciting journey of programming excellence.
