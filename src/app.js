@@ -10,6 +10,7 @@ const bcrypt = require("bcrypt"); // Import bcrypt for password hashing
 const rateLimit = require("express-rate-limit");
 const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
 
 const courseModel = require("./db/courseDB");
 
@@ -19,15 +20,17 @@ const isAuthenticated = require("./middlewares/isAuthenticated");
 const app = express();
 
 const limiter = rateLimit({
-  // windowMs: 15 * 60 * 1000, // 15 minutes
-  // max: 5, // 5 requests per windowMs
-  // message: "Too many requests from this IP, please try again later.",
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 requests per windowMs
+  message: "Too many requests from this IP, please try again later.",
 });
 
 app.set("view engine", "ejs");
 app.set("views", "src/views");
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+
+app.use(mongoSanitize());
 
 const config = require("../config.json");
 const addCSRF = require("./middlewares/addCSRF");
@@ -187,7 +190,7 @@ app.post("/register", limiter, async (req, res) => {
   }
 });
 
-app.get("/profile", isAuthenticated, async (req, res) => {
+app.get("/profile", limiter, isAuthenticated, async (req, res) => {
   res.render("profile", {
     user: req.user,
     messages: req.flash() /*csrfToken: req.csrfToken()*/,
@@ -242,19 +245,23 @@ app.post("/profile", limiter, isAuthenticated, async (req, res) => {
   return res.redirect("/profile");
 });
 
-app.use("/courses", async function (req, res) {
+app.use("/courses", limiter, isAuthenticated, async function (req, res) {
   const courses = await courseModel.find();
   return res.render("course", { courses: courses });
 });
 
-app.post("/search-course", async function (req, res) {
+app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
   const query = req.body.query;
-  req.body.query = {
+  const regexQuery = {
     title: { $regex: query, $options: "i" },
   };
-  console.log(req.body.query);
-  const searchCourses = await courseModel.findOne(req.body.query);
-  res.json(searchCourses);
+  try {
+    const searchCourses = await courseModel.findOne(regexQuery);
+    res.json(searchCourses);
+  } catch (err) {
+    console.error(err);
+    res.json({ message: "An error occurred while searching." });
+  }
 });
 
 app.use("/css", express.static("src/css"));
