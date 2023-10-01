@@ -1,0 +1,17 @@
+.course-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.course-item {
+  list-style-type: none;
+  margin-bottom: 20px;
+}
+
+.course-box {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #f9f9f9;
+}

@@ -11,6 +11,8 @@ const rateLimit = require("express-rate-limit");
 const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
 
+const courseModel = require("./db/courseDB");
+
 const User = require("./db/User");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 
@@ -221,6 +223,17 @@ app.post("/profile", limiter, isAuthenticated, async (req, res) => {
     // Handle the error, display an error message, or redirect to an error page
     return res.status(500).send("Error updating profile.");
   }
+});
+
+app.use("/courses", limiter, isAuthenticated, async function (req, res) {
+  const courses = await courseModel.find();
+  return res.render("course", { courses: courses });
+});
+
+app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
+  req.query.query.toLowerCase();
+  const searchCourses = await courseModel.findOne({ name: req.body.query });
+  return res.json({ courses: searchCourses });
 });
 
 app.use("/css", express.static("src/css"));
