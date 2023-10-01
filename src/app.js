@@ -8,6 +8,8 @@ const flash = require("connect-flash");
 const morgan = require("morgan");
 const bcrypt = require("bcrypt"); // Import bcrypt for password hashing
 const rateLimit = require("express-rate-limit");
+const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
 
 const User = require("./db/User");
 const isAuthenticated = require("./middlewares/isAuthenticated");
@@ -72,9 +74,11 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+app.use(cookieParser());
 app.use(
   session({ secret: config.secret_key, resave: false, saveUninitialized: true })
 );
+app.use(csrf());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -88,6 +92,9 @@ app.get("/login", limiter, (req, res) => {
 });
 
 app.post("/login",limiter, (req, res, next) => {
+  if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
+    return res.status(403).send("CSRF token validation failed.");
+  }
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -125,6 +132,9 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", limiter, async (req, res) => {
+  if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
+    return res.status(403).send("CSRF token validation failed.");
+  }
   const { username, email, password, confirmPassword, fullName } = req.body;
 
   try {
@@ -173,6 +183,9 @@ app.get('/profile', isAuthenticated, async (req, res) => {
     });
 
 app.post('/profile', limiter, isAuthenticated, async (req, res) => {
+  if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
+    return res.status(403).send("CSRF token validation failed.");
+  }
     const { fullName, avatarUrl, bio, location, website } = req.body;
   
     try {

@@ -16,6 +16,7 @@
     <div class="profile-section">
       <h2>Profile Information</h2>
       <form class="profile-form" action="/profile" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="form-group">
           <label for="fullName">Full Name:</label>
           <input
