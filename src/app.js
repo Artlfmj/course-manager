@@ -19,13 +19,13 @@ const isAuthenticated = require("./middlewares/isAuthenticated");
 const app = express();
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 requests per windowMs
-  message: "Too many requests from this IP, please try again later.",
+  // windowMs: 15 * 60 * 1000, // 15 minutes
+  // max: 5, // 5 requests per windowMs
+  // message: "Too many requests from this IP, please try again later.",
 });
 
 app.set("view engine", "ejs");
-app.set("views", "./views");
+app.set("views", "src/views");
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
@@ -87,15 +87,17 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/login", limiter,  (req, res) => {
+app.get("/login", limiter, (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   } else {
-    res.render("login", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ }); // Pass flash messages to the template
+    res.render("login", {
+      messages: req.flash("error") /*csrfToken: req.csrfToken()*/,
+    }); // Pass flash messages to the template
   }
 });
 
-app.post("/login",limiter, (req, res, next) => {
+app.post("/login", limiter, (req, res, next) => {
   /*console.log(req.body, req.csrfToken())
   if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
@@ -133,7 +135,9 @@ app.get("/", isAuthenticated, (req, res) => {
 
 app.get("/register", (req, res) => {
   if (req.isAuthenticated()) return res.redirect("/");
-  res.render("register", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ });
+  res.render("register", {
+    messages: req.flash("error") /*csrfToken: req.csrfToken()*/,
+  });
 });
 
 app.post("/register", limiter, async (req, res) => {
@@ -183,42 +187,27 @@ app.post("/register", limiter, async (req, res) => {
   }
 });
 
-app.get('/profile', isAuthenticated, async (req, res) => {
-    res.render('profile', { user: req.user, messages: req.flash(), /*csrfToken: req.csrfToken()*/ });
-    });
+app.get("/profile", isAuthenticated, async (req, res) => {
+  res.render("profile", {
+    user: req.user,
+    messages: req.flash() /*csrfToken: req.csrfToken()*/,
+  });
+});
 
-app.post('/profile', limiter, isAuthenticated, async (req, res) => {
+app.post("/profile", limiter, isAuthenticated, async (req, res) => {
   /*if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
   }*/
-    const { fullName, avatarUrl, bio, location, website } = req.body;
-  
-    try {
-      // Find the user by their ID (you need to have the user ID stored in the session)
-      const userId = req.user._id; // Assuming you have a user object in the session
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        // Handle the case where the user is not found
-        return res.status(404).send('User not found.');
-      }
-  
-      // Update the user's profile fields
-      user.fullName = fullName;
-      user.avatarUrl = avatarUrl;
-      user.bio = bio;
-      user.location = location;
-      user.website = website;
-  
-      // Save the updated user profile
-      await user.save();
-  
-      // Redirect to the user's profile page or any other desired page
-      return res.redirect('/profile');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      // Handle the error, display an error message, or redirect to an error page
-      return res.status(500).send('Error updating profile.');
+  const { fullName, avatarUrl, bio, location, website } = req.body;
+
+  try {
+    // Find the user by their ID (you need to have the user ID stored in the session)
+    const userId = req.user._id; // Assuming you have a user object in the session
+    const user = await User.findById(userId);
+
+    if (!user) {
+      // Handle the case where the user is not found
+      return res.status(404).send("User not found.");
     }
 
     // Update the user's profile fields
@@ -238,17 +227,34 @@ app.post('/profile', limiter, isAuthenticated, async (req, res) => {
     // Handle the error, display an error message, or redirect to an error page
     return res.status(500).send("Error updating profile.");
   }
+
+  // Update the user's profile fields
+  user.fullName = fullName;
+  user.avatarUrl = avatarUrl;
+  user.bio = bio;
+  user.location = location;
+  user.website = website;
+
+  // Save the updated user profile
+  await user.save();
+
+  // Redirect to the user's profile page or any other desired page
+  return res.redirect("/profile");
 });
 
-app.use("/courses", limiter, isAuthenticated, async function (req, res) {
+app.use("/courses", async function (req, res) {
   const courses = await courseModel.find();
   return res.render("course", { courses: courses });
 });
 
-app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
-  req.query.query.toLowerCase();
-  const searchCourses = await courseModel.findOne({ name: req.body.query });
-  return res.json({ courses: searchCourses });
+app.post("/search-course", async function (req, res) {
+  const query = req.body.query;
+  req.body.query = {
+    title: { $regex: query, $options: "i" },
+  };
+  console.log(req.body.query);
+  const searchCourses = await courseModel.findOne(req.body.query);
+  res.json(searchCourses);
 });
 
 app.use("/css", express.static("src/css"));

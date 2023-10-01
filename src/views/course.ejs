@@ -18,10 +18,16 @@
           <% courses.forEach(function(course) { %>
           <li class="course-item">
             <div class="course-box">
-              <h2><%= course.name %></h2>
-              <p><%= course.description %></p>
-              <p><strong>Duration:</strong> <%= course.duration %> hours</p>
-              <p><strong>Difficulty:</strong> <%= course.difficulty %></p>
+              <div class="course-image">
+                <img src="<%= course.image %>" alt="" />
+              </div>
+              <div class="course-details">
+                <h1><%= course.title %></h1>
+                <p><small><%= course.author %></small></p>
+                <p><%= course.shortDescription %></p>
+                <p><%= course.duration %> <%= course.durationType %></p>
+                <p><%= course.difficulty %></p>
+              </div>
             </div>
           </li>
           <% }); %>
