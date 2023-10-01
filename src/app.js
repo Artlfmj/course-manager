@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 const config = require("../config.json");
+const addCSRF = require("./middlewares/addCSRF");
 
 // Connect to MongoDB using the configuration
 mongoose
@@ -75,26 +76,28 @@ passport.deserializeUser((id, done) => {
 });
 
 app.use(cookieParser());
+//app.use(csrf());
+//app.use(addCSRF)
 app.use(
   session({ secret: config.secret_key, resave: false, saveUninitialized: true })
 );
-app.use(csrf());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/login", limiter, (req, res) => {
+app.get("/login", limiter,  (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   } else {
-    res.render("login", { messages: req.flash("error") }); // Pass flash messages to the template
+    res.render("login", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ }); // Pass flash messages to the template
   }
 });
 
 app.post("/login",limiter, (req, res, next) => {
+  /*console.log(req.body, req.csrfToken())
   if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
-  }
+  }*/
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -128,13 +131,13 @@ app.get("/", isAuthenticated, (req, res) => {
 
 app.get("/register", (req, res) => {
   if (req.isAuthenticated()) return res.redirect("/");
-  res.render("register", { messages: req.flash("error") });
+  res.render("register", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ });
 });
 
 app.post("/register", limiter, async (req, res) => {
-  if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
+  /*if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
-  }
+  }*/
   const { username, email, password, confirmPassword, fullName } = req.body;
 
   try {
@@ -179,13 +182,13 @@ app.post("/register", limiter, async (req, res) => {
 });
 
 app.get('/profile', isAuthenticated, async (req, res) => {
-    res.render('profile', { user: req.user, messages: req.flash() });
+    res.render('profile', { user: req.user, messages: req.flash(), /*csrfToken: req.csrfToken()*/ });
     });
 
 app.post('/profile', limiter, isAuthenticated, async (req, res) => {
-  if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
+  /*if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
-  }
+  }*/
     const { fullName, avatarUrl, bio, location, website } = req.body;
   
     try {
