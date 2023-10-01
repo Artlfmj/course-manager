@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css"> <!-- Include your CSS file -->
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        
+        <!-- Display error flash message if available -->
+        <% if (messages && messages.length > 0) { %>
+        <div class="alert alert-danger">
+            <%= messages[0] %>
+        </div>
+        <% } %>
+
+        <form action="/login" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+        <p>Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+</body>
+</html>
