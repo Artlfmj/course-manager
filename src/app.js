@@ -87,7 +87,7 @@ app.get("/login", limiter, (req, res) => {
   }
 });
 
-app.post("/login", (req, res, next) => {
+app.post("/login",limiter, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -172,7 +172,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
     res.render('profile', { user: req.user, messages: req.flash() });
     });
 
-app.post('/profile', isAuthenticated, async (req, res) => {
+app.post('/profile', limiter, isAuthenticated, async (req, res) => {
     const { fullName, avatarUrl, bio, location, website } = req.body;
   
     try {
