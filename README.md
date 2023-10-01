@@ -1,7 +1,6 @@
 # Course Manager
 
-<img src="https://m3-markdown-badges.vercel.app/stars/3/1/Artlfmj/course-manager">
-<img src="https://m3-markdown-badges.vercel.app/issues/3/1/Artlfmj/course-manager">
+<img src="https://m3-markdown-badges.vercel.app/stars/3/1/Artlfmj/course-manager"> <img src="https://m3-markdown-badges.vercel.app/issues/3/1/Artlfmj/course-manager">
 
 Course Manager is an open-source platform designed to provide a comprehensive and user-friendly solution for individuals seeking to enhance their programming skills. Whether you're a beginner looking to start your coding journey or an experienced developer aiming to broaden your knowledge, Course Manager offers a versatile environment for learning and growth.
 
@@ -29,6 +28,11 @@ This repository is participating in Hacktoberfest 2023. If you are new to Hackto
 **Accessible Learning:** We believe in making quality programming education accessible to everyone. With a mix of free and premium options, Course Manager ensures that learning valuable programming skills doesn't have to be a financial burden.
 
 **Continuous Growth:** Stay up-to-date with the latest technologies and trends in the ever-evolving programming landscape. Our course catalog is regularly updated to reflect industry advancements.
+
+## Our Discord
+🌐 **Join Us Today:**
+Help us improve online learning and be part of something bigger this Hacktoberfest! Join our community on Discord: [https://discord.gg/xbEPyR3U8e] and let's make a difference together.
+
 
 **Learning Flexibility:** Tailor your learning journey to your schedule and preferences. Study at your own pace, revisit course materials as needed, and explore new topics of interest.
 
