@@ -1,0 +1,74 @@
+/* Reset some default margin and padding */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set a background color for the entire page */
+body {
+    background-color: #f4f4f4;
+}
+
+/* Style the navigation bar */
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Style the main content area */
+.content {
+    margin: 20px;
+}
+
+/* Style the course list */
+.course-list {
+    list-style-type: none;
+}
+
+.course-list li {
+    margin-bottom: 10px;
+}
+
+.course-list a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Style the create course form */
+.create-course-form {
+    margin-top: 20px;
+}
+
+.create-course-form label, .create-course-form textarea, .create-course-form button {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.create-course-form textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.create-course-form button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.create-course-form button:hover {
+    background-color: #555;
+}
