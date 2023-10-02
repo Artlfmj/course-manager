@@ -1,0 +1,22 @@
+name: Assign Bot
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for Mention
+        if: contains(github.event.comment.body, '@Artlfmj assign me')
+        run: |
+          commenter=$(jq -r '.comment.user.login' "$GITHUB_EVENT_PATH")
+          commenter=$(echo "$commenter" | tr -d '[:space:]')
+          issue_number=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+          echo "Assigning @$commenter to issue #$issue_number"
+          gh issue assign "$issue_number" --assignee "$commenter"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
