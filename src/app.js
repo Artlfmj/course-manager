@@ -118,12 +118,13 @@ app.post("/login", limiter, csrfProtection, (req, res, next) => {
   })(req, res, next);
 });
 
-app.get("/logout", limiter, (req, res) => {
-  req.logout((err) => {
+app.get('/logout', limiter, (req, res) => {
+  req.session.destroy(function (err) {
     if (err) {
       console.error("Error during logout:", err);
+    } else {
+      res.redirect('/login');
     }
-    res.redirect("/login");
   });
 });
 
