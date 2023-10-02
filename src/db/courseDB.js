@@ -1,5 +1,5 @@
 // Import the mongoose library
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define a schema for the course
 const courseSchema = new mongoose.Schema({
@@ -8,23 +8,37 @@ const courseSchema = new mongoose.Schema({
     required: true,
     trim: true, // Remove whitespace from the beginning and end of the string
   },
-  description: {
+  shortDescription: {
     type: String,
-    required: true,
+    maxLength: 30,
+  },
+  longDescription: {
+    name: String,
+    values: mongoose.Schema.Types.Mixed,
   },
   duration: {
     type: Number,
     required: true,
   },
+  durationType: {
+    type: String,
+    enum: ["hours", "minutes", "seconds"],
+  },
   difficulty: {
     type: String,
-    required: true, 
+    required: true,
+  },
+  image: {
+    type: String,
+  },
+  author: {
+    type: String,
   },
   // Add more fields as needed
 });
 
 // Create a model using the schema
-const Course = mongoose.model('Course', courseSchema);
+const Course = mongoose.model("Course", courseSchema);
 
 // Export the Course model
 module.exports = Course;

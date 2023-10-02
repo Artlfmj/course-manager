@@ -10,6 +10,9 @@ const bcrypt = require("bcrypt"); // Import bcrypt for password hashing
 const rateLimit = require("express-rate-limit");
 const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+
+const courseModel = require("./db/courseDB");
 
 const User = require("./db/User");
 const isAuthenticated = require("./middlewares/isAuthenticated");
@@ -26,6 +29,8 @@ app.set("view engine", "ejs");
 app.set("views", "src/views");
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+
+app.use(mongoSanitize());
 
 const config = require("../config.json");
 const addCSRF = require("./middlewares/addCSRF");
@@ -203,7 +208,7 @@ app.post('/profile', limiter, isAuthenticated, csrfProtection, async (req, res) 
 
     if (!user) {
       // Handle the case where the user is not found
-      return res.status(404).send('User not found.');
+      return res.status(404).send("User not found.");
     }
 
     // Update the user's profile fields
@@ -217,11 +222,30 @@ app.post('/profile', limiter, isAuthenticated, csrfProtection, async (req, res) 
     await user.save();
 
     // Redirect to the user's profile page or any other desired page
-    return res.redirect('/profile');
+    return res.redirect("/profile");
   } catch (error) {
-    console.error('Error updating profile:', error);
+    console.error("Error updating profile:", error);
     // Handle the error, display an error message, or redirect to an error page
-    return res.status(500).send('Error updating profile.');
+    return res.status(500).send("Error updating profile.");
+  }
+});
+
+app.use("/courses", limiter, isAuthenticated, async function (req, res) {
+  const courses = await courseModel.find();
+  return res.render("course", { courses: courses });
+});
+
+app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
+  const query = req.body.query;
+  const regexQuery = {
+    title: { $regex: query, $options: "i" },
+  };
+  try {
+    const searchCourses = await courseModel.findOne(regexQuery);
+    res.json(searchCourses);
+  } catch (err) {
+    console.error(err);
+    res.json({ message: "An error occurred while searching." });
   }
 });
 

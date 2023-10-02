@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/course.css" />
+    <title>Courses</title>
+  </head>
+  <body>
+    <div class="course-container">
+      <h1>Courses</h1>
+      <form action="/search-course" method="POST">
+        <input type="text" name="query" placeholder="Search..." />
+        <button type="submit">Search</button>
+      </form>
+      <div class="course-list-container">
+        <ul class="course-list">
+          <% courses.forEach(function(course) { %>
+          <li class="course-item">
+            <div class="course-box">
+              <div class="course-image">
+                <img src="<%= course.image %>" alt="" />
+              </div>
+              <div class="course-details">
+                <h1><%= course.title %></h1>
+                <p><small><%= course.author %></small></p>
+                <p><%= course.shortDescription %></p>
+                <p><%= course.duration %> <%= course.durationType %></p>
+                <p><%= course.difficulty %></p>
+              </div>
+            </div>
+          </li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
