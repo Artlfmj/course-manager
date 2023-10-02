@@ -1,91 +1,110 @@
 /* Reset some default styles */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Header styles */
-  header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  /* Profile container */
-  .profile-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Profile section */
-  .profile-section {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  
-  /* Profile section title */
-  .profile-section h2 {
-    margin-top: 0;
-    font-size: 24px;
-  }
-  
-  /* Profile form */
-  .profile-form {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  /* Profile form fields */
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Header styles */
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Profile container */
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Profile section */
+.profile-section {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Profile section title */
+.profile-section h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+/* Profile form */
+.profile-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Profile form fields */
+.profile-form .form-group {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+/* Profile form labels */
+.profile-form label {
+  display: block;
+  font-weight: bold;
+}
+
+/* Profile form input fields */
+.profile-form input[type="text"],
+.profile-form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Profile form submit button */
+.profile-form .submit-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Profile form submit button on hover */
+.profile-form .submit-btn:hover {
+  background-color: #555;
+}
+
+/* Error message styles */
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
+
+/* Success message styles */
+.success-message {
+  color: green;
+  margin-top: 5px;
+}
+
+/* Tablet screens */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
   .profile-form .form-group {
-    width: 100%;
-    margin-bottom: 15px;
+      width: 50%;
+      padding: 0 10px;
   }
-  
-  /* Profile form labels */
-  .profile-form label {
-    display: block;
-    font-weight: bold;
+}
+
+/* Laptop screens */
+@media screen and (min-width: 1025px) {
+  .profile-form .form-group {
+      width: 33.33%;
+      padding: 0 10px;
   }
-  
-  /* Profile form input fields */
-  .profile-form input[type="text"],
-  .profile-form input[type="email"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  /* Profile form submit button */
   .profile-form .submit-btn {
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
+      width: auto;
   }
-  
-  /* Profile form submit button on hover */
-  .profile-form .submit-btn:hover {
-    background-color: #555;
-  }
-  
-  /* Error message styles */
-  .error-message {
-    color: red;
-    margin-top: 5px;
-  }
-  
-  /* Success message styles */
-  .success-message {
-    color: green;
-    margin-top: 5px;
-  }
-  
+}
