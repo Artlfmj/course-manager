@@ -1,5 +1,5 @@
 {
-    "mongodb_uri": "mongodb://localhost:27017/course",
+    "mongodb_uri": "mongodb+srv://kirattechnologies:iRbi4XRDdM7JMMkl@cluster0.e95bnsi.mongodb.net/courses",
     "secret_key": "YOUR_SECRET_KEY_HERE"
   }
   
