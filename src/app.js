@@ -45,28 +45,28 @@ mongoose
     process.exit(1);
   });
 
-  passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      try {
-        const user = await User.findOne({ username: username });
-        if (!user) return done(null, false, { message: "Incorrect username." });
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch)
-          return done(null, false, { message: "Incorrect password." });
-  
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
-    })
-  );
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await User.findOne({ username: username });
+      if (!user) return done(null, false, { message: "Incorrect username." });
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch)
+        return done(null, false, { message: "Incorrect password." });
+
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById(id)
+  User.findById(id)
     .then((user) => {
       done(null, user);
     })
@@ -84,16 +84,19 @@ app.use(
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+//changes
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
 
-app.get("/login", limiter,  (req, res) => {
+app.get("/login", limiter, csrfProtection, (req, res) => {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   } else {
-    res.render("login", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ }); // Pass flash messages to the template
+    res.render("login", { messages: req.flash("error"), csrfToken: req.csrfToken() }); // Pass flash messages to the template
   }
 });
 
-app.post("/login",limiter, (req, res, next) => {
+app.post("/login", limiter, csrfProtection, (req, res, next) => {
   /*console.log(req.body, req.csrfToken())
   if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
@@ -116,13 +119,13 @@ app.post("/login",limiter, (req, res, next) => {
 });
 
 app.get("/logout", limiter, (req, res) => {
-    req.logout((err) => {
-      if (err) {
-        console.error("Error during logout:", err);
-      }
-      res.redirect("/login");
-    });
-  });  
+  req.logout((err) => {
+    if (err) {
+      console.error("Error during logout:", err);
+    }
+    res.redirect("/login");
+  });
+});
 
 app.get("/", isAuthenticated, (req, res) => {
   // This route is protected and can only be accessed by authenticated users
@@ -131,10 +134,11 @@ app.get("/", isAuthenticated, (req, res) => {
 
 app.get("/register", (req, res) => {
   if (req.isAuthenticated()) return res.redirect("/");
-  res.render("register", { messages: req.flash("error"), /*csrfToken: req.csrfToken()*/ });
+  console.log(req.csrfToken())
+  res.render("register", { messages: req.flash("error"), csrfToken: req.csrfToken() });
 });
 
-app.post("/register", limiter, async (req, res) => {
+app.post("/register", limiter, csrfProtection, async (req, res) => {
   /*if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
   }*/
@@ -182,43 +186,43 @@ app.post("/register", limiter, async (req, res) => {
 });
 
 app.get('/profile', isAuthenticated, async (req, res) => {
-    res.render('profile', { user: req.user, messages: req.flash(), /*csrfToken: req.csrfToken()*/ });
-    });
+  res.render('profile', { user: req.user, messages: req.flash(), csrfToken: req.csrfToken() });
+});
 
-app.post('/profile', limiter, isAuthenticated, async (req, res) => {
+app.post('/profile', limiter, isAuthenticated, csrfProtection, async (req, res) => {
   /*if (!req.body._csrf || req.body._csrf !== req.csrfToken()) {
     return res.status(403).send("CSRF token validation failed.");
   }*/
-    const { fullName, avatarUrl, bio, location, website } = req.body;
-  
-    try {
-      // Find the user by their ID (you need to have the user ID stored in the session)
-      const userId = req.user._id; // Assuming you have a user object in the session
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        // Handle the case where the user is not found
-        return res.status(404).send('User not found.');
-      }
-  
-      // Update the user's profile fields
-      user.fullName = fullName;
-      user.avatarUrl = avatarUrl;
-      user.bio = bio;
-      user.location = location;
-      user.website = website;
-  
-      // Save the updated user profile
-      await user.save();
-  
-      // Redirect to the user's profile page or any other desired page
-      return res.redirect('/profile');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      // Handle the error, display an error message, or redirect to an error page
-      return res.status(500).send('Error updating profile.');
+  const { fullName, avatarUrl, bio, location, website } = req.body;
+
+  try {
+    // Find the user by their ID (you need to have the user ID stored in the session)
+    const userId = req.user._id; // Assuming you have a user object in the session
+    const user = await User.findById(userId);
+
+    if (!user) {
+      // Handle the case where the user is not found
+      return res.status(404).send('User not found.');
     }
-  });
+
+    // Update the user's profile fields
+    user.fullName = fullName;
+    user.avatarUrl = avatarUrl;
+    user.bio = bio;
+    user.location = location;
+    user.website = website;
+
+    // Save the updated user profile
+    await user.save();
+
+    // Redirect to the user's profile page or any other desired page
+    return res.redirect('/profile');
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    // Handle the error, display an error message, or redirect to an error page
+    return res.status(500).send('Error updating profile.');
+  }
+});
 
 app.use("/css", express.static("src/css"));
 
