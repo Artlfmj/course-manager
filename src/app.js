@@ -11,6 +11,8 @@ const rateLimit = require("express-rate-limit");
 const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const courseModel = require("./db/courseDB");
 
@@ -37,7 +39,7 @@ const addCSRF = require("./middlewares/addCSRF");
 
 // Connect to MongoDB using the configuration
 mongoose
-  .connect(config.mongodb_uri, {
+  .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -84,7 +86,7 @@ app.use(cookieParser());
 //app.use(csrf());
 //app.use(addCSRF)
 app.use(
-  session({ secret: config.secret_key, resave: false, saveUninitialized: true })
+  session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true })
 );
 app.use(flash());
 app.use(passport.initialize());
