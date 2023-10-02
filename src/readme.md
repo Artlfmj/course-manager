@@ -6,8 +6,8 @@ Want to contribute? Well your most welcome here is an Set-up instruction to help
 
 ### 1. Clone the repository:
 
-```git clone https://github.com/Artlfmj/course-manager.git
-
+```
+    git clone https://github.com/Artlfmj/course-manager.git
     cd course-manager
 ```
 
