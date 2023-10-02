@@ -25,13 +25,18 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: 90%;
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s ease-in-out;
-  color: #333;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff;
 }
 
 button[type="submit"] {
@@ -70,9 +75,16 @@ a:hover {
 }
 
 /* Responsive styling */
+
+/* Mobile screens */
 @media screen and (max-width: 600px) {
   .registration-container {
       padding: 20px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
   }
 
   input[type="text"],
@@ -82,6 +94,26 @@ a:hover {
   }
 
   button[type="submit"] {
+  }
+
+  button[type="submit"] {
       font-size: 16px;
+  }
+}
+
+/* Tablet screens */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  .registration-container {
+      max-width: 600px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+      font-size: 15px;
+  }
+
+  button[type="submit"] {
+      font-size: 17px;
   }
 }
