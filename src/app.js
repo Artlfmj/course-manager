@@ -34,7 +34,6 @@ app.use(morgan("dev"));
 
 app.use(mongoSanitize());
 
-const config = require("../config.json");
 const addCSRF = require("./middlewares/addCSRF");
 
 // Connect to MongoDB using the configuration
