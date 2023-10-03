@@ -1,5 +1,6 @@
+/* Updated color scheme */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -12,41 +13,46 @@ body {
 .login-container {
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    max-width: 400px; /* Limit the width of the container */
+    margin: 0 auto; /* Center the container horizontally */
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 28px; /* Increase the font size for the title */
     margin-bottom: 20px;
+    color: #007bff; /* Change the title color */
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Increase spacing between form elements */
 }
 
 label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px; /* Slightly increase margin */
+    color: #333; /* Change label text color */
 }
 
 input[type="text"],
 input[type="password"] {
-    width: 100%;
-    padding: 10px;
+    width: 90%; /* Set the input width to 90% */
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 button {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 3px;
+    padding: 12px 24px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -54,5 +60,17 @@ button:hover {
 }
 
 p {
-    margin-top: 10px;
+    margin-top: 20px; /* Increase margin at the top of the paragraph */
+    font-size: 14px; /* Adjust font size */
+    color: #777; /* Change paragraph text color */
+}
+
+/* Add some additional styles for links */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
