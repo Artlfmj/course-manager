@@ -250,6 +250,10 @@ app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
   }
 });
 
+app.get("/create-course", isAuthenticated, async function (req, res) {
+  return res.render("course-create");
+});
+
 app.use("/css", express.static("src/css"));
 
 // Start the server
