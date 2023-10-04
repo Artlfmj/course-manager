@@ -18,6 +18,8 @@ body {
     text-align: center;
     max-width: 400px; /* Limit the width of the container */
     margin: 0 auto; /* Center the container horizontally */
+    width: 100%;  /* Ensures it takes the full width on mobile */
+    max-width: 400px;  /* Restricts its width on larger screens */
 }
 
 h1 {
@@ -43,6 +45,8 @@ input[type="password"] {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    border-radius: 3px;
+    font-size: 14px; /* Adjust for better mobile readability */
 }
 
 button {
@@ -53,6 +57,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%; /* Full width on mobile for better touch targets */
 }
 
 button:hover {
@@ -73,4 +78,11 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Media Query for Larger Devices */
+@media screen and (min-width: 768px) {
+    button {
+        width: auto; /* Resetting button width for larger screens */
+    }
 }

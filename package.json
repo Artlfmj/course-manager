@@ -13,6 +13,7 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.3",
     "morgan": "^1.10.0",
+    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0"
@@ -23,6 +24,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
