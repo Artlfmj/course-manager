@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 function dbConfig() {
   mongoose
-    .connect(process.env.MONGODB_URL, {
+    .connect("mongodb+srv://kirattechnologies:iRbi4XRDdM7JMMkl@cluster0.e95bnsi.mongodb.net/courses", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
