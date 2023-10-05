@@ -1,6 +1,6 @@
 const express=require("express");
 const csrf=require("csurf")
-
+const addCSRF = require("../middlewares/addCSRF");
 const csrfProtection=csrf({cookie:true})
 const {loginGet, loginPost, logout, landingPage, registerGet, registerPost, profileGet, profilePost, searchCourse}=require("../controller/userController")
 // const { loginGet, loginPost, logout, landingPage, registerGet, registerPost, profileGet, profilePost, searchCourse } = require("../controller/userRoutesController");

@@ -1,15 +1,15 @@
 const express = require("express");
-const mongoose = require("mongoose");
+
 const fs = require("fs");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const flash = require("connect-flash");
 const morgan = require("morgan");
-const bcrypt = require("bcrypt"); // Import bcrypt for password hashing
+const bodyparser = require('body-parser')
 const limiter=require("./utils/limiter")
+const addCSRF = require("./middlewares/addCSRF");
 
-const csrf = require("csurf");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const dotenv = require("dotenv");
@@ -31,19 +31,23 @@ const app = express();
 //Views folder should be accessible from anywhere..
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyparser.urlencoded({extended:true}));
+// app.use(app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
 app.use(morgan("dev"));
 
 app.use(mongoSanitize());
 
-const addCSRF = require("./middlewares/addCSRF");
+
 
 //Regular middleware
 app.use(cookieParser());
+const csrf = require("csurf");
 
 app.use(
   session({
-    secret: "secr3tt",   //delete
+    secret: process.env.SECRET_KEY,   
     resave: false,
     saveUninitialized: true,
   })
@@ -71,8 +75,11 @@ app.use("/courses", limiter, isAuthenticated, async function (req, res) {
 
 
 app.use("/css", express.static("src/css"));
+
+// user routes
 const userRoutes=require("./routes/userRoutes")
 app.use(userRoutes)
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
