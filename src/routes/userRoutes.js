@@ -14,10 +14,10 @@ const router=express.Router();
 router.route("/login").get(limiter,csrfProtection,loginGet)
 router.route("/login").post(csrfProtection,limiter,loginPost)
 router.route("/logout").get(limiter,logout)
-router.route("/").get(isAuthenticated,landingPage)
-router.route("/register").get(registerGet)
+router.route("/").get(limiter,isAuthenticated,landingPage)
+router.route("/register").get(limiter,registerGet)
 router.route("/register").post(limiter,csrfProtection,registerPost)
-router.route("/profile").get(isAuthenticated,profileGet)
+router.route("/profile").get(limiter,isAuthenticated,profileGet)
 router.route("/profile").post(limiter,isAuthenticated,csrfProtection,profilePost)
 router.route("/search-course").post(limiter,isAuthenticated,searchCourse)
 
