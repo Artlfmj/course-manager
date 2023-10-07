@@ -1,6 +1,9 @@
 function addCSRF(req, res, next) {
-  res.locals.csrfToken = req.csrfToken();
+  var token = req.csrfToken();
+  res.cookie('XSRF-TOKEN', token);
+  res.locals.csrfToken = token;
   next();
+
 }
 
 module.exports = addCSRF;
