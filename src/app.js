@@ -35,6 +35,7 @@ app.use(morgan("dev"));
 app.use(mongoSanitize());
 
 const addCSRF = require("./middlewares/addCSRF");
+const Course = require("./db/courseDB");
 
 // Connect to MongoDB using the configuration
 mongoose
@@ -250,8 +251,40 @@ app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
   }
 });
 
-app.get("/create-course", isAuthenticated, async function (req, res) {
-  return res.render("course-create");
+app.get("/create-course", csrfProtection, isAuthenticated, async function (req, res) {
+  return res.render("course-create", { messageError: req.flash("error"), messageSuccess: req.flash("success"), csrfToken: req.csrfToken() });
+});
+
+app.post("/create-course", isAuthenticated, csrfProtection, async function (req, res) {
+  // TODO: Need to implement upload image logic
+  try {
+    const { courseName, shortDescription, longDescription, duration, durationType, imageFile, difficulty } = req.body;
+    const userName = req.user.fullName;
+    const findExistingCourse = await Course.findOne({ title: {'$regex': `^${courseName}$`, $options: 'i'} });
+    if (!findExistingCourse) {
+      const newCourse = new Course({
+        title: courseName,
+        shortDescription: shortDescription,
+        longDescription: { longDescription: longDescription },
+        duration: duration,
+        durationType: durationType?.toLowerCase(),
+        difficulty: difficulty,
+        image: imageFile,
+        author: userName
+      });
+
+      await newCourse.save();
+      req.flash("success", "Course created successfully");
+      return res.redirect("/create-course");
+    } else {
+      req.flash("error", "This course is already available.");
+      return res.redirect("/create-course");
+    }
+  } catch (error) {
+    console.error("Error during course creation:", error);
+    req.flash("error", "Failed to create the course. Please try again.");
+    res.redirect("/create-course");
+  }
 });
 
 app.use("/css", express.static("src/css"));
