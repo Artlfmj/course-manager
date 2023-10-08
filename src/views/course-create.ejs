@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/course-create.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Create Course</title>
+</head>
+
+<body>
+    <section class="wizard-section">
+        <div class="row no-gutters">
+            <div class="col-lg-6 col-md-6">
+                <div class="wizard-content-left d-flex justify-content-center align-items-center">
+                    <h1>Create Course</h1>
+                </div>
+            </div>
+            <% if (messageError && messageError.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= messageError[0] %>
+                </div>
+            <% } %>
+            <% if (messageSuccess && messageSuccess.length > 0) { %>
+                <div class="alert alert-success">
+                    <%= messageSuccess[0] %>
+                </div>
+            <% } %>
+            <div class="col-lg-6 col-md-6">
+                <div class="form-wizard">
+                    <form action="/create-course" method="POST" id="courseCreationForm">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="form-wizard-header">
+                            <p>Fill all form field to go next step</p>
+                            <ul class="list-unstyled form-wizard-steps clearfix">
+                                <li class="active"><span>1</span></li>
+                                <li><span>2</span></li>
+                                <li><span>3</span></li>
+                            </ul>
+                        </div>
+                        <fieldset class="wizard-fieldset show">
+                            <h5>Course Information</h5>
+                            <div class="form-group">
+                                <input type="text" class="form-control wizard-required" id="courseName" name="courseName" />
+                                <label for="courseName" class="wizard-form-text-label">Course Name*</label>
+                                <div class="wizard-form-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <textarea type="text" class="form-control" id="shortDescription" name="shortDescription"></textarea>
+                                <label for="shortDescription" class="wizard-form-text-label">Short Description</label>
+                                <div class="wizard-form-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <textarea type="text" class="form-control" id="longDescription" name="longDescription"></textarea>
+                                <label for="longDescription" class="wizard-form-text-label">Long Description</label>
+                                <div class="wizard-form-error"></div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <a href="javascript:;" class="form-wizard-next-btn float-right">Next</a>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wizard-fieldset">
+                            <h5>Account Information</h5>
+                            <div class="form-group">
+                                <input type="number" class="form-control wizard-required" id="courseDuration" name="duration" />
+                                <label for="courseDuration" class="wizard-form-text-label">Duration*</label>
+                                <div class="wizard-form-error"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">Duration Type*</div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <select class="form-control" name="durationType">
+                                            <option value="years">Year</option>
+                                            <option value="months" selected>Month</option>
+                                            <option value="days">Days</option>
+                                            <option value="hours">Hours</option>
+                                            <option value="minutes">Minutes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <a href="javascript:;" class="form-wizard-previous-btn float-left">Previous</a>
+                                <a href="javascript:;" class="form-wizard-next-btn float-right">Next</a>
+                            </div>
+                        </fieldset>
+                        <fieldset class="wizard-fieldset">
+                            <div class="row">
+                                <div class="col-12">Difficulty Type*</div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <select class="form-control" name="difficulty">
+                                            <option value="Beginner" selected>Beginner</option>
+                                            <option value="Intermediate">Intermediate</option>
+                                            <option value="Advanced">Advanced</option>
+                                            <option value="Expert">Expert</option>
+                                            <option value="Professional">Professional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">Upload Image*</div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="form-group">
+                                        <input type="file" name="imageFile" class="form-control wizard-required" />
+                                        <div class="wizard-form-error"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <a href="javascript:;" class="form-wizard-previous-btn float-left">Previous</a>
+                                <button type="submit" class="form-wizard-submit float-right">Submit</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        jQuery(document).ready(function() {
+            // click on next button
+            jQuery('.form-wizard-next-btn').click(function() {
+                var parentFieldset = jQuery(this).parents('.wizard-fieldset');
+                var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
+                var next = jQuery(this);
+                var nextWizardStep = true;
+                parentFieldset.find('.wizard-required').each(function(){
+                    var thisValue = jQuery(this).val();
+
+                    if( thisValue == "") {
+                        jQuery(this).siblings(".wizard-form-error").slideDown();
+                        nextWizardStep = false;
+                    }
+                    else {
+                        jQuery(this).siblings(".wizard-form-error").slideUp();
+                    }
+                });
+                if( nextWizardStep) {
+                    next.parents('.wizard-fieldset').removeClass("show","400");
+                    currentActiveStep.removeClass('active').addClass('activated').next().addClass('active',"400");
+                    next.parents('.wizard-fieldset').next('.wizard-fieldset').addClass("show","400");
+                    jQuery(document).find('.wizard-fieldset').each(function(){
+                        if(jQuery(this).hasClass('show')){
+                            var formAtrr = jQuery(this).attr('data-tab-content');
+                            jQuery(document).find('.form-wizard-steps .form-wizard-step-item').each(function(){
+                                if(jQuery(this).attr('data-attr') == formAtrr){
+                                    jQuery(this).addClass('active');
+                                    var innerWidth = jQuery(this).innerWidth();
+                                    var position = jQuery(this).position();
+                                    jQuery(document).find('.form-wizard-step-move').css({"left": position.left, "width": innerWidth});
+                                }else{
+                                    jQuery(this).removeClass('active');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            //click on previous button
+            jQuery('.form-wizard-previous-btn').click(function() {
+                var counter = parseInt(jQuery(".wizard-counter").text());;
+                var prev =jQuery(this);
+                var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
+                prev.parents('.wizard-fieldset').removeClass("show","400");
+                prev.parents('.wizard-fieldset').prev('.wizard-fieldset').addClass("show","400");
+                currentActiveStep.removeClass('active').prev().removeClass('activated').addClass('active',"400");
+                jQuery(document).find('.wizard-fieldset').each(function(){
+                    if(jQuery(this).hasClass('show')){
+                        var formAtrr = jQuery(this).attr('data-tab-content');
+                        jQuery(document).find('.form-wizard-steps .form-wizard-step-item').each(function(){
+                            if(jQuery(this).attr('data-attr') == formAtrr){
+                                jQuery(this).addClass('active');
+                                var innerWidth = jQuery(this).innerWidth();
+                                var position = jQuery(this).position();
+                                jQuery(document).find('.form-wizard-step-move').css({"left": position.left, "width": innerWidth});
+                            }else{
+                                jQuery(this).removeClass('active');
+                            }
+                        });
+                    }
+                });
+            });
+            //click on form submit button
+            jQuery(document).on("click",".form-wizard .form-wizard-submit" , function(){
+                var parentFieldset = jQuery(this).parents('.wizard-fieldset');
+                var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
+                parentFieldset.find('.wizard-required').each(function() {
+                    var thisValue = jQuery(this).val();
+                    if( thisValue == "" ) {
+                        jQuery(this).siblings(".wizard-form-error").slideDown();
+                    }
+                    else {
+                        jQuery(this).siblings(".wizard-form-error").slideUp();
+                    }
+                });
+            });
+            // focus on input field check empty or not
+            jQuery(".form-control").on('focus', function(){
+                var tmpThis = jQuery(this).val();
+                if(tmpThis == '' ) {
+                    jQuery(this).parent().addClass("focus-input");
+                }
+                else if(tmpThis !='' ){
+                    jQuery(this).parent().addClass("focus-input");
+                }
+            }).on('blur', function(){
+                var tmpThis = jQuery(this).val();
+                if(tmpThis == '' ) {
+                    jQuery(this).parent().removeClass("focus-input");
+                    jQuery(this).siblings('.wizard-form-error').slideDown("3000");
+                }
+                else if(tmpThis !='' ){
+                    jQuery(this).parent().addClass("focus-input");
+                    jQuery(this).siblings('.wizard-form-error').slideUp("3000");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

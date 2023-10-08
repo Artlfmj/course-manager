@@ -39,8 +39,6 @@ app.use(morgan("dev"));
 
 app.use(mongoSanitize());
 
-
-
 //Regular middleware
 app.use(cookieParser());
 const csrf = require("csurf");
@@ -72,7 +70,55 @@ app.use("/courses", limiter, isAuthenticated, async function (req, res) {
   return res.render("course", { courses: courses });
 });
 
+app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
+  const query = req.body.query;
+  const regexQuery = {
+    title: { $regex: query, $options: "i" },
+  };
+  try {
+    const searchCourses = await courseModel.findOne(regexQuery);
+    res.json(searchCourses);
+  } catch (err) {
+    console.error(err);
+    res.json({ message: "An error occurred while searching." });
+  }
+});
 
+app.get("/create-course", csrfProtection, limiter, isAuthenticated, async function (req, res) {
+  return res.render("course-create", { messageError: req.flash("error"), messageSuccess: req.flash("success"), csrfToken: req.csrfToken() });
+});
+
+app.post("/create-course", limiter, isAuthenticated, csrfProtection, async function (req, res) {
+  // TODO: Need to implement upload image logic
+  try {
+    const { courseName, shortDescription, longDescription, duration, durationType, imageFile, difficulty } = req.body;
+    const userName = req.user.fullName;
+    const findExistingCourse = await courseModel.findOne({ title: {'$regex': `^${courseName}$`, $options: 'i'} });
+    if (!findExistingCourse) {
+      const newCourse = new courseModel({
+        title: courseName,
+        shortDescription: shortDescription,
+        longDescription: { longDescription: longDescription },
+        duration: duration,
+        durationType: durationType?.toLowerCase(),
+        difficulty: difficulty,
+        image: imageFile,
+        author: userName
+      });
+
+      await newCourse.save();
+      req.flash("success", "Course created successfully");
+      return res.redirect("/create-course");
+    } else {
+      req.flash("error", "This course is already available.");
+      return res.redirect("/create-course");
+    }
+  } catch (error) {
+    console.error("Error during course creation:", error);
+    req.flash("error", "Failed to create the course. Please try again.");
+    res.redirect("/create-course");
+  }
+});
 
 app.use("/css", express.static("src/css"));
 
