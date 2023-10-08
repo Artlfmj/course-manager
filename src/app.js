@@ -84,11 +84,11 @@ app.post("/search-course", limiter, isAuthenticated, async function (req, res) {
   }
 });
 
-app.get("/create-course", csrfProtection, isAuthenticated, async function (req, res) {
+app.get("/create-course", csrfProtection, limiter, isAuthenticated, async function (req, res) {
   return res.render("course-create", { messageError: req.flash("error"), messageSuccess: req.flash("success"), csrfToken: req.csrfToken() });
 });
 
-app.post("/create-course", isAuthenticated, csrfProtection, async function (req, res) {
+app.post("/create-course", isAuthenticated, csrfProtection, limiter, async function (req, res) {
   // TODO: Need to implement upload image logic
   try {
     const { courseName, shortDescription, longDescription, duration, durationType, imageFile, difficulty } = req.body;
