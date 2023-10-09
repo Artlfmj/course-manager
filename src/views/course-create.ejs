@@ -48,10 +48,10 @@
                                 <div class="wizard-form-error"></div>
                             </div>
                             <div class="form-group">
-                                <textarea type="text" class="form-control" id="shortDescription" name="shortDescription"></textarea>
+                                <textarea type="text" class="form-control" id="shortDescription" name="shortDescription" oninput="limitShortDescription(this, 30)"></textarea>
                                 <label for="shortDescription" class="wizard-form-text-label">Short Description</label>
                                 <div class="wizard-form-error"></div>
-                            </div>
+                            </div>                            
                             <div class="form-group">
                                 <textarea type="text" class="form-control" id="longDescription" name="longDescription"></textarea>
                                 <label for="longDescription" class="wizard-form-text-label">Long Description</label>
@@ -122,6 +122,12 @@
         </div>
     </section>
     <script>
+        function limitShortDescription(element, maxLength) {
+            const inputValue = element.value;
+            if (inputValue.length > maxLength) {
+                element.value = inputValue.slice(0, maxLength);
+            }
+        }
         jQuery(document).ready(function() {
             // click on next button
             jQuery('.form-wizard-next-btn').click(function() {

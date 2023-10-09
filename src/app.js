@@ -51,8 +51,6 @@ app.use(
   })
 );       
 
-app.use(csrf());
-app.use(addCSRF)
 
 app.use(flash());
 // Initialize Passport and session middleware
