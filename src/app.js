@@ -14,11 +14,14 @@ const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const dotenv = require("dotenv");
 const path = require("path");
+const multer = require("multer");
 
 const dbConfig = require("./config/dbconfig");
-dotenv.config();
+dotenv.config({ path: "./config.env" });
 // Connect to MongoDB using the configuration
 dbConfig();
+
+dotenv.config();
 
 const courseModel = require("./db/courseDB");
 
@@ -61,7 +64,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 //changes
 const csrfProtection = csrf({ cookie: true });
-app.use(csrfProtection);
+// app.use(csrfProtection);
 
 
 
@@ -119,6 +122,66 @@ app.post("/create-course", limiter, isAuthenticated, csrfProtection, async funct
     res.redirect("/create-course");
   }
 });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads"); //Make a folder named uploads otherwise it will fail
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+
+app.use(
+  "/submission",
+  limiter,
+  isAuthenticated,
+  csrfProtection,
+  async function (req, res) {
+    return res.render("submission");
+  }
+);
+
+app.post(
+  "/upload",
+  limiter,
+  isAuthenticated,
+  csrfProtection,
+  upload.array("files"),
+  async function (req, res) {
+    console.log("api");
+    const errors = [];
+    const maxSize = 15 * 1024 * 1024; //15Mb file size limit
+    const allowedFileTypes = [
+      ".doc",
+      ".docx",
+      ".xls",
+      ".xlsx",
+      ".ppt",
+      ".pptx",
+      ".txt",
+      //add or remove allowed files type
+    ];
+    if (req.files.length <= 0) {
+      return res.render("submission", { error: "No File found" });
+    }
+    req.files.forEach((file) => {
+      const fileExtension = path.extname(file.originalname).toLowerCase();
+      if (!allowedFileTypes.includes(fileExtension)) {
+        errors.push(`Invalid file type: ${file.originalname}`);
+      }
+      if (file.size > maxSize) {
+        errors.push(`${file.originalname} size is greater then 15MB`);
+      }
+    });
+    if (errors.length > 0) {
+      return res.render("submission", { error: errors });
+    } else {
+      return res.render("submission", { message: "File submit succesfully" });
+    }
+  }
+);
 
 app.use("/css", express.static("src/css"));
 

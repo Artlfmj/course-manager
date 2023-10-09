@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment Submission</title>
+  </head>
+  <body>
+    <h1>Submission</h1>
+    <%if(typeof error === "undefined"){%>
+    <form
+      action="/upload"
+      method="post"
+      enctype="multipart/form-data"
+      onsubmit="submitForm(event)"
+    >
+      <input
+        type="file"
+        name="files"
+        accept=".doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt"
+        multiple
+      />
+      <input type="submit" value="Upload Document" />
+    </form>
+    <% if (typeof message !== "undefined") { %>
+    <div class="success-message"><%= message %></div>
+    <% } %> <% } else { %> <%= error %> <%}%>
+  </body>
+</html>
