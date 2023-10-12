@@ -1,74 +1,88 @@
-/* Reset some default margin and padding */
-body, h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-}
-
-/* Set a background color for the entire page */
 body {
-    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
 }
 
-/* Style the navigation bar */
-.navbar {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.navbar a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.navbar a:hover {
-    text-decoration: underline;
-}
-
-/* Style the main content area */
-.content {
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px;
+    padding: 20px;
+    transition: transform 0.2s;
 }
 
-/* Style the course list */
-.course-list {
-    list-style-type: none;
+.card:hover {
+    transform: scale(1.02);
 }
 
-.course-list li {
+.card h2 {
+    font-size: 1.5em;
     margin-bottom: 10px;
-}
-
-.course-list a {
-    text-decoration: none;
     color: #333;
 }
 
-/* Style the create course form */
-.create-course-form {
-    margin-top: 20px;
+.card p {
+    margin: 0 0 10px;
 }
 
-.create-course-form label, .create-course-form textarea, .create-course-form button {
-    display: block;
+.card strong {
+    font-weight: bold;
+    color: #555;
+}
+
+.course-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+
+.sidebar {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    font-size: 1.5em;
     margin-bottom: 10px;
 }
 
-.create-course-form textarea {
-    width: 100%;
-    height: 100px;
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-.create-course-form button {
-    background-color: #333;
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
     color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
+    font-size: 1.2em;
 }
 
-.create-course-form button:hover {
-    background-color: #555;
+.sidebar a:hover {
+    text-decoration: underline;
 }

@@ -3,9 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard for the Course Manager Web Application</title>
+    <title>Course Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-    <h1>Dashboard for the Course Manager Web Application</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Course Dashboard</h1>
+        </div>
+        <div class="sidebar">
+            <h2>Course Types</h2>
+            <ul>
+                <li><a href="/dashboard?type=all">All Courses</a></li>
+                <li><a href="/dashboard?type=beginner">Beginner</a></li>
+                <li><a href="/dashboard?type=intermediate">Intermediate</a></li>
+                <li><a href="/dashboard?type=advanced">Advanced</a></li>
+            </ul>
+        </div>
+        <div class="course-list">
+            <% courses.forEach(course => { %>
+                <div class="card">
+                    <h2><%= course.title %></h2>
+                    <p><%= course.shortDescription %></p>
+                    <p><strong>Duration:</strong> <%= course.duration %> <%= course.durationType %></p>
+                    <p><strong>Difficulty:</strong> <%= course.difficulty %></p>
+                    <p><strong>Author:</strong> <%= course.author %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
 </body>
 </html>

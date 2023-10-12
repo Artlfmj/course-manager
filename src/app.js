@@ -14,6 +14,7 @@ const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const dotenv = require("dotenv");
 const path = require("path");
+const courses = require('./utils/dummy_courses');
 
 const dbConfig = require("./config/dbconfig");
 dotenv.config();
@@ -128,4 +129,8 @@ app.use(userRoutes)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+app.get("/dashboard", isAuthenticated, csrfProtection, async function (req, res) {
+  return res.render("dashboard", { csrfToken: req.csrfToken(), courses });
 });
