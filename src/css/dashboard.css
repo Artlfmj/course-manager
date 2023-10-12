@@ -86,3 +86,11 @@ body {
 .sidebar a:hover {
     text-decoration: underline;
 }
+
+/* Add this to your existing CSS file */
+#search {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
