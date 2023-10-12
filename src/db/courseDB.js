@@ -13,8 +13,8 @@ const courseSchema = new mongoose.Schema({
     maxLength: 30,
   },
   longDescription: {
-    name: String,
-    values: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.Map, // [Issue: #26][Fix] | Should contain type instead of values
+    of: mongoose.Schema.Types.Mixed,
   },
   duration: {
     type: Number,
@@ -22,7 +22,7 @@ const courseSchema = new mongoose.Schema({
   },
   durationType: {
     type: String,
-    enum: ["hours", "minutes", "seconds"],
+    enum: ["years", "months", "days",  "hours", "minutes", "seconds"],
   },
   difficulty: {
     type: String,

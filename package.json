@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "csurf": "^1.11.0",
@@ -23,6 +24,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "prod": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -34,5 +37,8 @@
   "bugs": {
     "url": "https://github.com/Artlfmj/course-manager/issues"
   },
-  "homepage": "https://github.com/Artlfmj/course-manager#readme"
+  "homepage": "https://github.com/Artlfmj/course-manager#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
