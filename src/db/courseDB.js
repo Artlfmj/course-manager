@@ -34,6 +34,9 @@ const courseSchema = new mongoose.Schema({
   author: {
     type: String,
   },
+  price: {
+    type: Number
+  }
   // Add more fields as needed
 });
 

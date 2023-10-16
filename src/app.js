@@ -89,7 +89,7 @@ app.get("/create-course", csrfProtection, limiter, isAuthenticated, async functi
 app.post("/create-course", limiter, isAuthenticated, csrfProtection, async function (req, res) {
   // TODO: Need to implement upload image logic
   try {
-    const { courseName, shortDescription, longDescription, duration, durationType, imageFile, difficulty } = req.body;
+    const { courseName, shortDescription, longDescription, duration, durationType, imageFile, difficulty, price } = req.body;
     const userName = req.user.fullName;
     const findExistingCourse = await courseModel.findOne({ title: {'$regex': `^${courseName}$`, $options: 'i'} });
     if (!findExistingCourse) {
@@ -101,7 +101,8 @@ app.post("/create-course", limiter, isAuthenticated, csrfProtection, async funct
         durationType: durationType?.toLowerCase(),
         difficulty: difficulty,
         image: imageFile,
-        author: userName
+        author: userName,
+        price: price
       });
 
       await newCourse.save();
