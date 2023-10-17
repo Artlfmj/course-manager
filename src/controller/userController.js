@@ -94,6 +94,15 @@ exports.landingPage= (req, res) => {
         req.flash("error", "Passwords do not match.");
         return res.redirect("/register");
       }
+      if (password.length < 6) {
+        req.flash("error", "Password should be at least 6 characters long.");
+        return res.redirect("/register");
+      }
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,7}$/;
+    if (!email.match(emailRegex)) {
+      req.flash("error", "Invalid email address format.");
+      return res.redirect("/register");
+    }
   
       // Hash the password before saving it
       const salt = await bcrypt.genSalt(10);
