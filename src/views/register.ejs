@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/register.css"> <!-- Include your CSS file -->
-    <title>Registration</title>
-</head>
-<body>
+<%- include('partials/header.ejs', {title:"Register", style: "register"}) %>
     <div class="registration-container">
         <h1>Registration</h1>
         
@@ -45,5 +37,4 @@
         </form>
         <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
-</body>
-</html>
+<%- include('partials/footer.ejs') %>
