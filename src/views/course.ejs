@@ -21,6 +21,9 @@
                 <p><%= course.shortDescription %></p>
                 <p><%= course.duration %> <%= course.durationType %></p>
                 <p><%= course.difficulty %></p>
+                <% if(course.price){ %>
+                <a href="#" class="btn btn-primary">Buy for $<%= course.price %></a>
+                <% } %>
               </div>
             </div>
           </li>
